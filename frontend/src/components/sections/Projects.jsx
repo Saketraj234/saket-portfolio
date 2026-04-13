@@ -59,7 +59,7 @@ const Projects = () => {
       image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=800&q=80",
       tech: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT", "Socket.io"],
       github: "https://github.com/Saketraj234/Daily-Kharcha-Tracker",
-      live: "#",
+      live: "https://daily-kharcha-tracker.vercel.app/",
       featured: true
     },
   ];
