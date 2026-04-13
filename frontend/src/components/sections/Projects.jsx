@@ -41,7 +41,7 @@ const Projects = () => {
       image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=800&q=80",
       tech: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT", "Tailwind CSS"],
       github: "https://github.com/Saketraj234/Rail-Connect",
-      live: "#",
+      live: "https://rail-connect-eight.vercel.app/",
       featured: true
     },
     {
