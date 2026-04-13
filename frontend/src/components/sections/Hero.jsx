@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Typewriter } from 'react-simple-typewriter';
 import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaCode } from 'react-icons/fa';
 import { Link } from 'react-scroll';
 
 const Hero = () => {
-  const [greeting, setGreeting] = useState('');
+  const [greeting] = useState(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning ☀️';
+    if (hour < 18) return 'Good Afternoon ☀️';
+    return 'Good Evening 🌙';
+  });
+  const reduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good Morning ☀️');
-    else if (hour < 18) setGreeting('Good Afternoon ☀️');
-    else setGreeting('Good Evening 🌙');
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
   }, []);
+
+  const allowAmbientMotion = !reduceMotion && !isMobile;
 
   const techTags = [
     { name: 'React', icon: <FaCode /> },
@@ -26,7 +36,7 @@ const Hero = () => {
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center justify-center relative bg-[#0b0e14] pt-32 pb-20 overflow-hidden"
+      className="min-h-screen flex items-center justify-center relative bg-transparent pt-32 pb-20 overflow-hidden"
     >
       {/* Animated Background Elements */}
       <div className="mesh-gradient" />
@@ -75,15 +85,19 @@ const Hero = () => {
               {techTags.map((tag, index) => (
                 <motion.div 
                   key={index} 
-                  animate={{ 
-                    y: [0, -5, 0],
-                    transition: {
-                      duration: 3 + (index % 3),
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }
-                  }}
-                  className="flex items-center gap-2 px-5 py-2 bg-[#111827]/80 border border-white/5 rounded-xl text-slate-300 text-xs font-bold shadow-xl hover:border-blue-500/30 transition-all"
+                  animate={
+                    allowAmbientMotion
+                      ? {
+                          y: [0, -5, 0],
+                          transition: {
+                            duration: 3 + (index % 3),
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          },
+                        }
+                      : undefined
+                  }
+                  className="flex items-center gap-2 px-5 py-2 bg-[#0a1a3a]/70 border border-white/5 rounded-xl text-slate-200 text-xs font-bold shadow-xl hover:border-blue-500/30 transition-all"
                 >
                   <span className="text-blue-500"><FaCode /></span>
                   <span className="tracking-widest">{tag.name}</span>
@@ -122,7 +136,7 @@ const Hero = () => {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 flex items-center justify-center bg-[#111827] border border-white/10 text-slate-400 rounded-full hover:text-blue-500 hover:border-blue-500 transition-all text-xl"
+                  className="w-12 h-12 flex items-center justify-center bg-[#081a3a] border border-white/10 text-slate-300 rounded-full hover:text-blue-500 hover:border-blue-500 transition-all text-xl"
                 >
                   {social.icon}
                 </a>

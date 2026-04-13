@@ -21,18 +21,26 @@ app.get('/', (req, res) => {
 });
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/portfolio';
+const MONGODB_URI =
+  process.env.MONGODB_URI || (process.env.NODE_ENV === 'production' ? '' : 'mongodb://localhost:27017/portfolio');
 const PORT = process.env.PORT || 5000;
 
-mongoose
-  .connect(MONGODB_URI)
-  .then(() => {
-    console.log('Connected to MongoDB');
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err.message);
-  });
+const startServer = async () => {
+  if (!MONGODB_URI) {
+    console.error('MONGODB_URI is not set. Add it in Render Environment Variables.');
+    process.exit(1);
+  }
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('Connected to MongoDB');
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error('MongoDB connection error:', err.message);
+    process.exit(1);
+  }
+};
+
+startServer();

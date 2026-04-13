@@ -1,9 +1,21 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { FaCertificate, FaTrophy, FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 
 const Achievements = () => {
   const [selectedImg, setSelectedImg] = useState(null);
+  const reduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
+
+  const allowAmbientMotion = !reduceMotion && !isMobile;
 
   const certificates = [
     {
@@ -81,7 +93,7 @@ const Achievements = () => {
   ];
 
   return (
-    <section id="achievements" className="py-20 bg-[#0b0e14] relative overflow-hidden">
+    <section id="achievements" className="py-20 bg-transparent relative overflow-hidden">
       <div className="mesh-gradient opacity-10" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -105,14 +117,18 @@ const Achievements = () => {
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              animate={{ 
-                y: [0, -10, 0],
-                transition: {
-                  duration: 4 + (index % 3),
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }
-              }}
+              animate={
+                allowAmbientMotion
+                  ? {
+                      y: [0, -10, 0],
+                      transition: {
+                        duration: 4 + (index % 3),
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      },
+                    }
+                  : undefined
+              }
               whileHover={{ 
                 y: -15, 
                 scale: 1.02,
@@ -123,13 +139,15 @@ const Achievements = () => {
               className="relative group p-0.5 rounded-[2.5rem] bg-transparent hover:bg-gradient-to-tr from-blue-600/50 to-cyan-400/50 transition-all duration-500"
               onClick={() => setSelectedImg(cert)}
             >
-              <div className="relative bg-[#111827]/80 backdrop-blur-2xl rounded-[2.4rem] overflow-hidden border border-white/5 h-full flex flex-col cursor-pointer">
+              <div className="relative bg-[#081a3a]/75 backdrop-blur-none md:backdrop-blur-2xl rounded-[2.4rem] overflow-hidden border border-white/5 h-full flex flex-col cursor-pointer">
                 {/* Image Section */}
                 <div className="relative h-56 overflow-hidden p-6">
                   <div className="w-full h-full rounded-3xl overflow-hidden relative group-hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-shadow duration-500">
                     <img 
                       src={cert.image} 
                       alt={cert.title} 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       onError={(e) => {
                         e.target.style.display = 'none';
@@ -162,7 +180,7 @@ const Achievements = () => {
 
                   <div className="mt-auto flex justify-center">
                     <button 
-                      className="flex items-center gap-2 px-6 py-2.5 bg-[#0b0e14] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all"
+                      className="flex items-center gap-2 px-6 py-2.5 bg-[#050b1a] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all"
                     >
                       <FaExternalLinkAlt size={14} /> View Certificate
                     </button>
@@ -181,7 +199,7 @@ const Achievements = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-10 bg-[#0b0e14]/98 backdrop-blur-2xl"
+            className="fixed inset-0 z-[200] flex items-center justify-center p-4 sm:p-10 bg-[#050b1a]/98 backdrop-blur-none md:backdrop-blur-2xl"
             onClick={() => setSelectedImg(null)}
           >
             <motion.button
@@ -198,7 +216,7 @@ const Achievements = () => {
               animate={{ scale: 1, y: 0, opacity: 1 }}
               exit={{ scale: 0.9, y: 50, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative max-w-6xl w-full bg-[#111827] rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(59,130,246,0.2)] border border-white/5"
+              className="relative max-w-6xl w-full bg-[#081a3a] rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(59,130,246,0.2)] border border-white/5"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col lg:flex-row h-full">
@@ -209,6 +227,8 @@ const Achievements = () => {
                     <img 
                       src={selectedImg.image} 
                       alt={selectedImg.title} 
+                      loading="lazy"
+                      decoding="async"
                       className="max-w-full max-h-[70vh] object-contain rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-10"
                       onError={(e) => {
                         e.target.style.display = 'none';
@@ -222,7 +242,7 @@ const Achievements = () => {
                 </div>
 
                 {/* Details Section */}
-                <div className="lg:w-2/5 p-10 sm:p-16 flex flex-col justify-center bg-gradient-to-br from-[#111827] to-[#0b0e14] relative">
+                <div className="lg:w-2/5 p-10 sm:p-16 flex flex-col justify-center bg-gradient-to-br from-[#081a3a] to-[#050b1a] relative">
                   <div className="absolute top-0 right-0 p-16 opacity-[0.02] pointer-events-none">
                     <FaCertificate className="text-[20rem] text-blue-500 rotate-12" />
                   </div>

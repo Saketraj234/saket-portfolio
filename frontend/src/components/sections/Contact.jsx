@@ -21,7 +21,6 @@ const Contact = () => {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    alert('Email copied to clipboard!');
   };
 
   const handleSubmit = async (e) => {
@@ -29,28 +28,56 @@ const Contact = () => {
     setStatus({ loading: true, success: false, error: null });
 
     try {
-      const res = await axios.post('https://saket-portfolio-kiof.onrender.com/api/messages', formData, {
+      const apiBaseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        (import.meta.env.DEV ? 'http://localhost:5000' : 'https://saket-portfolio-kiof.onrender.com');
+
+      const res = await axios.post(`${apiBaseUrl.replace(/\/$/, '')}/api/messages`, formData, {
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        timeout: 20000,
       });
-      if (res.status === 201) {
+
+      if (res.status >= 200 && res.status < 300) {
         setStatus({ loading: false, success: true, error: null });
         setFormData({ name: '', email: '', message: '' });
         setTimeout(() => setStatus(prev => ({ ...prev, success: false })), 5000);
+      } else {
+        setStatus({ loading: false, success: false, error: 'Message send nahi ho paya. Please try again.' });
       }
     } catch (err) {
       console.error('Contact Form Error:', err);
-      setStatus({ 
-        loading: false, 
-        success: false, 
-        error: err.response?.data?.message || 'Something went wrong. Please try again later.' 
+      const apiBaseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        (import.meta.env.DEV ? 'http://localhost:5000' : 'https://saket-portfolio-kiof.onrender.com');
+
+      const normalizedApiBaseUrl = apiBaseUrl.replace(/\/$/, '');
+
+      const responseStatus = err?.response?.status;
+      const responseMessage = err?.response?.data?.message;
+      const code = err?.code;
+
+      let message = responseMessage || 'Something went wrong. Please try again later.';
+
+      if (!err?.response) {
+        message = `Backend reachable nahi hai (${normalizedApiBaseUrl}). Backend start karo ya VITE_API_BASE_URL sahi set karo.`;
+      } else if (code === 'ECONNABORTED') {
+        message = 'Server timeout ho gaya. Please thodi der baad try karo.';
+      } else if (responseStatus) {
+        message = responseMessage || `Request fail ho gaya (HTTP ${responseStatus}).`;
+      }
+
+      setStatus({
+        loading: false,
+        success: false,
+        error: message,
       });
     }
   };
 
   return (
-    <section id="contact" className="py-20 bg-[#0b0e14] relative overflow-hidden">
+    <section id="contact" className="py-20 bg-transparent relative overflow-hidden">
       <div className="mesh-gradient opacity-10" />
 
       <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
@@ -86,8 +113,8 @@ const Contact = () => {
               </div>
             </div>
 
-            <p className="text-slate-400 max-w-lg italic mt-4 font-medium">
-              I'm open to backend development, full-stack projects, and new internship opportunities.
+            <p className="text-slate-300 max-w-xl italic mt-4 font-medium leading-relaxed">
+              Open to internships and full-stack projects — if you have a product idea, I can help you build and ship it end-to-end.
             </p>
           </div>
         </motion.div>
@@ -98,7 +125,7 @@ const Contact = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="bg-[#111827]/40 backdrop-blur-2xl border border-white/5 p-8 sm:p-12 rounded-[3rem] shadow-2xl"
+          className="bg-[#081a3a]/45 backdrop-blur-none md:backdrop-blur-2xl border border-white/5 p-8 sm:p-12 rounded-[3rem] shadow-2xl"
         >
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative group">
@@ -109,7 +136,7 @@ const Contact = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full bg-[#0b0e14]/50 border border-slate-800 rounded-2xl pl-16 pr-6 py-5 text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-700 font-medium"
+                className="w-full bg-[#050b1a]/60 border border-slate-800 rounded-2xl pl-16 pr-6 py-5 text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-700 font-medium"
                 placeholder="Your Name"
               />
             </div>
@@ -121,7 +148,7 @@ const Contact = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full bg-[#0b0e14]/50 border border-slate-800 rounded-2xl pl-16 pr-6 py-5 text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-700 font-medium"
+                className="w-full bg-[#050b1a]/60 border border-slate-800 rounded-2xl pl-16 pr-6 py-5 text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-700 font-medium"
                 placeholder="Your Email"
               />
             </div>
@@ -132,7 +159,7 @@ const Contact = () => {
                 onChange={handleChange}
                 required
                 rows="5"
-                className="w-full bg-[#0b0e14]/50 border border-slate-800 rounded-2xl px-8 py-5 text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-700 resize-none font-medium"
+                className="w-full bg-[#050b1a]/60 border border-slate-800 rounded-2xl px-8 py-5 text-white focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-700 resize-none font-medium"
                 placeholder="Your Message"
               ></textarea>
             </div>
@@ -153,6 +180,12 @@ const Contact = () => {
             {status.success && (
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-emerald-500 font-bold text-sm">
                 Message Sent Successfully!
+              </motion.p>
+            )}
+
+            {status.error && (
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-rose-400 font-bold text-sm">
+                {status.error}
               </motion.p>
             )}
           </form>

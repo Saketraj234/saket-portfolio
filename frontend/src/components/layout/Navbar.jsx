@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-scroll';
 import { HiMenuAlt3, HiX } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,6 +6,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const lastScrollYRef = useRef(0);
+  const isMobileRef = useRef(false);
+  const isOpenRef = useRef(false);
+  const isVisibleRef = useRef(true);
 
   const navLinks = [
     { name: 'Home', to: 'home' },
@@ -17,11 +23,88 @@ const Navbar = () => {
   ];
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const media = window.matchMedia('(max-width: 767px)');
+    const apply = () => setIsMobile(media.matches);
+    apply();
+    if (typeof media.addEventListener === 'function') {
+      media.addEventListener('change', apply);
+      return () => media.removeEventListener('change', apply);
+    }
+    media.addListener(apply);
+    return () => media.removeListener(apply);
+  }, []);
+
+  useEffect(() => {
+    isMobileRef.current = isMobile;
+  }, [isMobile]);
+
+  useEffect(() => {
+    isOpenRef.current = isOpen;
+  }, [isOpen]);
+
+  useEffect(() => {
+    isVisibleRef.current = isVisible;
+  }, [isVisible]);
+
+  useEffect(() => {
+    let rafId = null;
+    let lastScrolledValue = null;
+
+    const update = () => {
+      rafId = null;
+      const y = window.scrollY;
+      const nextScrolled = y > 50;
+      if (nextScrolled !== lastScrolledValue) {
+        lastScrolledValue = nextScrolled;
+        setIsScrolled(nextScrolled);
+      }
+
+      if (!isMobileRef.current) {
+        lastScrollYRef.current = y;
+        if (!isVisibleRef.current) {
+          isVisibleRef.current = true;
+          setIsVisible(true);
+        }
+        return;
+      }
+
+      if (isOpenRef.current) {
+        lastScrollYRef.current = y;
+        if (!isVisibleRef.current) {
+          isVisibleRef.current = true;
+          setIsVisible(true);
+        }
+        return;
+      }
+
+      const lastY = lastScrollYRef.current;
+      const isScrollingDown = y > lastY;
+      const shouldHide = isScrollingDown && y > 140;
+      const shouldShow = !isScrollingDown || y < 20;
+
+      if (shouldHide && isVisibleRef.current) {
+        isVisibleRef.current = false;
+        setIsVisible(false);
+      }
+      if (shouldShow && !isVisibleRef.current) {
+        isVisibleRef.current = true;
+        setIsVisible(true);
+      }
+
+      lastScrollYRef.current = y;
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const onScroll = () => {
+      if (rafId != null) return;
+      rafId = window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      if (rafId != null) window.cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -34,13 +117,15 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
+      className={`fixed top-0 left-0 w-full z-[100] transition-transform duration-300 ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } transition-[background,box-shadow,padding] duration-500 ${
         isScrolled
-          ? 'bg-[#0b0e14]/90 backdrop-blur-xl border-b border-white/5 py-3'
-          : 'bg-transparent py-5'
+          ? 'bg-gradient-to-b from-[#0b1f48]/80 via-[#061432]/75 to-[#050b1a]/60 backdrop-blur-lg md:backdrop-blur-xl border-b border-white/10 py-4 shadow-[0_14px_45px_rgba(0,0,0,0.35)] ring-1 ring-white/5'
+          : 'bg-gradient-to-b from-[#0b1f48]/55 via-[#061432]/45 to-[#050b1a]/35 backdrop-blur-lg md:backdrop-blur-xl border-b border-white/10 py-5 ring-1 ring-white/5'
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-12 lg:px-16">
+      <div className="max-w-[1600px] mx-auto px-8 sm:px-14 lg:px-20">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="home" smooth={true} duration={500} className="cursor-pointer group">
@@ -72,7 +157,7 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-white hover:text-blue-500 transition-colors z-[110]"
+            className="md:hidden text-white/90 hover:text-white transition-colors z-[110]"
           >
             {isOpen ? <HiX size={28} /> : <HiMenuAlt3 size={28} />}
           </button>
@@ -86,7 +171,7 @@ const Navbar = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 w-full h-screen bg-black z-[105] flex flex-col items-center justify-center"
+            className="fixed inset-0 w-full h-screen bg-gradient-to-b from-[#050b1a] via-[#07122d] to-[#050b1a] z-[105] flex flex-col items-center justify-center"
           >
             {/* Logo in Overlay */}
             <div className="absolute top-5 left-6">
@@ -95,14 +180,6 @@ const Navbar = () => {
                 <span className="blue-text-gradient ml-1.5">Raj</span>
               </h1>
             </div>
-
-            {/* Close Button */}
-            <button
-              onClick={() => setIsOpen(false)}
-              className="absolute top-5 right-6 text-white hover:text-blue-500 transition-colors"
-            >
-              <HiX size={32} />
-            </button>
 
             <div className="flex flex-col items-center gap-12">
               {navLinks.map((link, index) => (

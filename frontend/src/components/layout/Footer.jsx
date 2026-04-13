@@ -15,7 +15,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-[#0b0e14] pt-20 pb-12 relative overflow-hidden">
+    <footer className="bg-transparent pt-20 pb-12 relative overflow-hidden">
       <div className="mesh-gradient opacity-10" />
       
       <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
@@ -49,7 +49,7 @@ const Footer = () => {
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.1 }}
-              className="w-14 h-14 flex items-center justify-center bg-[#111827] border border-white/10 text-slate-400 rounded-full hover:text-blue-500 hover:border-blue-500 transition-all text-2xl shadow-xl"
+              className="w-14 h-14 flex items-center justify-center bg-[#081a3a] border border-white/10 text-slate-300 rounded-full hover:text-blue-500 hover:border-blue-500 transition-all text-2xl shadow-xl"
             >
               {social.icon}
             </motion.a>

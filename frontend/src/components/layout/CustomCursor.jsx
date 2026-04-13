@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const CustomCursor = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [enabled, setEnabled] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
   
@@ -11,26 +11,27 @@ const CustomCursor = () => {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
+    const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const update = () => setEnabled(mediaQuery.matches);
+    update();
 
     const moveCursor = (e) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
     };
 
-    window.addEventListener('mousemove', moveCursor);
+    if (mediaQuery.matches) {
+      window.addEventListener('mousemove', moveCursor, { passive: true });
+    }
+    mediaQuery.addEventListener('change', update);
 
     return () => {
-      window.removeEventListener('resize', checkMobile);
       window.removeEventListener('mousemove', moveCursor);
+      mediaQuery.removeEventListener('change', update);
     };
   }, [cursorX, cursorY]);
 
-  if (isMobile) return null;
+  if (!enabled) return null;
 
   return (
     <motion.div

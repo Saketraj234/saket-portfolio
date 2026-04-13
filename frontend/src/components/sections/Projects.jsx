@@ -1,40 +1,71 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { FaGithub, FaExternalLinkAlt, FaStar } from 'react-icons/fa';
 
 const Projects = () => {
+  const reduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
+
+  const allowAmbientMotion = !reduceMotion && !isMobile;
+
   const projects = [
     {
-      title: "Social Media Backend API",
-      description: "A robust and scalable RESTful API built with Java and Spring Boot, featuring JWT authentication, role-based access control, and efficient database interactions.",
-      image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=1000",
-      tech: ["Java", "Spring Boot", "PostgreSQL", "JWT"],
-      github: "https://github.com",
-      live: "https://demo.com",
+      title: "Weather Forecasting App",
+      description: "A responsive weather forecasting web application that fetches real-time weather data using external APIs. Users can search for any city to view temperature, humidity, and weather conditions with a clean and user-friendly interface.",
+      image: "https://images.unsplash.com/photo-1501973801540-537f08ccae7b?auto=format&fit=crop&w=800&q=80",
+      tech: ["HTML", "CSS", "JavaScript", "API"],
+      github: "https://github.com/Saketraj234/Projects/tree/main/Weather%20Forecasting",
+      live: "#",
+      featured: false
+    },
+    {
+      title: "Advanced Scientific Calculator",
+      description: "A modern scientific calculator web application with support for advanced mathematical operations such as trigonometric functions, square roots, and memory operations. It features multiple themes, a responsive UI, and smooth user interactions for an enhanced calculation experience.",
+      image: "https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=800&q=80",
+      tech: ["HTML", "CSS", "JavaScript"],
+      github: "https://github.com/Saketraj234/Projects/tree/main/Calculator",
+      live: "#",
+      featured: false
+    },
+    {
+      title: "RailConnect – Train WiFi Add-On System",
+      description: "A full-stack MERN application that simulates a railway ticket booking system with an integrated onboard WiFi add-on service. Users can search trains, book tickets, and optionally purchase internet access during their journey, enhancing travel connectivity and user experience.",
+      image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=800&q=80",
+      tech: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT", "Tailwind CSS"],
+      github: "https://github.com/Saketraj234/Rail-Connect",
+      live: "#",
       featured: true
     },
     {
-      title: "E-Commerce App",
-      description: "A full-featured e-commerce platform with search, filtering, and a seamless checkout experience. Built with MERN stack.",
-      image: "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=1000",
-      tech: ["React", "Node.js", "MongoDB", "Tailwind"],
-      github: "https://github.com",
-      live: "https://demo.com",
-      featured: true
+      title: "Video Conferencing Web Application",
+      description: "A full-stack real-time video conferencing platform built using WebRTC and Socket.io, enabling seamless video/audio communication, screen sharing, chat, and meeting recording. Designed to simulate modern virtual meeting solutions like Zoom with a responsive and user-friendly interface.",
+      image: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80",
+      tech: ["MongoDB", "Express.js", "React.js", "Node.js", "WebRTC", "Socket.io", "Tailwind CSS"],
+      github: "https://github.com/Saketraj234/Video-Conferencing-Web-Application",
+      live: "#",
+      featured: false
     },
     {
-      title: "Task Management Tool",
-      description: "A collaborative task management application with real-time updates and intuitive drag-and-drop interface.",
-      image: "https://images.unsplash.com/photo-1540350394557-8d14678e7f91?auto=format&fit=crop&q=80&w=1000",
-      tech: ["React", "Express", "Socket.io", "PostgreSQL"],
-      github: "https://github.com",
-      live: "https://demo.com",
+      title: "Daily Kharcha Tracker (Group Expense & Split App)",
+      description: "A MERN-based expense tracking application with group expense splitting features. Users can create groups for trips or outings, invite others via shareable links, add shared expenses, automatically split costs, and communicate through real-time chat within the group.",
+      image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=800&q=80",
+      tech: ["MongoDB", "Express.js", "React.js", "Node.js", "JWT", "Socket.io"],
+      github: "https://github.com/Saketraj234/Daily-Kharcha-Tracker",
+      live: "#",
       featured: true
     },
   ];
 
   return (
-    <section id="projects" className="py-20 bg-[#0b0e14] relative overflow-hidden">
+    <section id="projects" className="py-20 bg-transparent relative overflow-hidden">
       <div className="mesh-gradient opacity-10" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -58,14 +89,18 @@ const Projects = () => {
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              animate={{ 
-                y: [0, -10, 0],
-                transition: {
-                  duration: 4 + index,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }
-              }}
+              animate={
+                allowAmbientMotion
+                  ? {
+                      y: [0, -10, 0],
+                      transition: {
+                        duration: 4 + index,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      },
+                    }
+                  : undefined
+              }
               whileHover={{ 
                 y: -15, 
                 scale: 1.02,
@@ -75,13 +110,15 @@ const Projects = () => {
               viewport={{ once: true }}
               className="relative group p-0.5 rounded-[2.5rem] bg-transparent hover:bg-gradient-to-tr from-blue-600/50 to-cyan-400/50 transition-all duration-500"
             >
-              <div className="relative bg-[#111827]/80 backdrop-blur-2xl rounded-[2.4rem] overflow-hidden border border-white/5">
+              <div className="relative bg-[#081a3a]/75 backdrop-blur-none md:backdrop-blur-2xl rounded-[2.4rem] overflow-hidden border border-white/5">
                 {/* Image Section */}
                 <div className="relative h-64 overflow-hidden p-6">
                   <div className="w-full h-full rounded-3xl overflow-hidden relative group-hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-shadow duration-500">
                     <img 
                       src={project.image} 
                       alt={project.title} 
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-blue-900/20 group-hover:bg-transparent transition-colors duration-500" />
@@ -119,7 +156,7 @@ const Projects = () => {
                       href={project.github} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#0b0e14] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-w-[140px]"
+                      className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#050b1a] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-w-[140px]"
                     >
                       <FaGithub size={18} /> GitHub
                     </a>
@@ -128,7 +165,7 @@ const Projects = () => {
                         href={project.live} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#0b0e14] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-w-[140px]"
+                        className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#050b1a] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-w-[140px]"
                       >
                         <FaExternalLinkAlt size={16} /> Live Demo
                       </a>

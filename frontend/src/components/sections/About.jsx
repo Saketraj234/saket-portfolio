@@ -1,9 +1,19 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 
 const About = () => {
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1.2]);
+  const reduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
+
+  const allowAmbientMotion = !reduceMotion && !isMobile;
 
   const education = [
     {
@@ -49,7 +59,7 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20 bg-[#0b0e14] relative overflow-hidden">
+    <section id="about" className="py-20 bg-transparent relative overflow-hidden">
       <div className="mesh-gradient opacity-20" />
       
       <div className="max-w-4xl mx-auto px-6 relative z-10">
@@ -57,23 +67,29 @@ const About = () => {
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          animate={{ 
-            y: [0, -15, 0],
-            transition: {
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }
-          }}
+          animate={
+            allowAmbientMotion
+              ? {
+                  y: [0, -15, 0],
+                  transition: {
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
+                }
+              : undefined
+          }
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
           className="flex justify-center mb-12"
         >
           <div className="relative p-1.5 rounded-[3.5rem] bg-gradient-to-tr from-blue-600 via-cyan-400 to-purple-500 shadow-[0_0_50px_rgba(59,130,246,0.3)] group cursor-pointer">
-            <div className="bg-[#0b0e14] rounded-[3.2rem] p-1.5 overflow-hidden">
+            <div className="bg-[#050b1a] rounded-[3.2rem] p-1.5 overflow-hidden">
               <img 
                 src="/profile.png.png" 
                 alt="Saket Raj" 
+                loading="lazy"
+                decoding="async"
                 className="w-full max-w-[400px] h-auto object-cover rounded-[3rem] group-hover:scale-105 transition-transform duration-700"
               />
             </div>
@@ -96,14 +112,18 @@ const About = () => {
             <div className="w-20 h-1.5 bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full mb-8 shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
             
             <motion.div 
-              animate={{ 
-                y: [0, -5, 0],
-                transition: {
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }
-              }}
+              animate={
+                allowAmbientMotion
+                  ? {
+                      y: [0, -5, 0],
+                      transition: {
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      },
+                    }
+                  : undefined
+              }
               className="space-y-6 text-slate-300 text-lg leading-relaxed font-medium"
             >
               <p>
@@ -119,20 +139,24 @@ const About = () => {
           </motion.div>
 
           {/* Stats Bar - Horizontal with Floating Effect */}
-          <div className="grid grid-cols-3 gap-4 py-8 border-y border-white/5 bg-white/2 backdrop-blur-sm rounded-2xl px-4">
+          <div className="grid grid-cols-3 gap-4 py-8 border-y border-white/5 bg-white/2 backdrop-blur-none md:backdrop-blur-sm rounded-2xl px-4">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                animate={{ 
-                  y: [0, -5, 0],
-                  transition: {
-                    duration: 3 + index,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
-                }}
+                animate={
+                  allowAmbientMotion
+                    ? {
+                        y: [0, -5, 0],
+                        transition: {
+                          duration: 3 + index,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        },
+                      }
+                    : undefined
+                }
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className="text-center group"
@@ -150,14 +174,18 @@ const About = () => {
                 key={tag} 
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                animate={{ 
-                  y: [0, -3, 0],
-                  transition: {
-                    duration: 2 + (i % 3),
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
-                }}
+                animate={
+                  allowAmbientMotion
+                    ? {
+                        y: [0, -3, 0],
+                        transition: {
+                          duration: 2 + (i % 3),
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        },
+                      }
+                    : undefined
+                }
                 transition={{ delay: i * 0.05 }}
                 className="px-6 py-2.5 bg-blue-500/5 border border-blue-500/20 rounded-full text-blue-400 text-[11px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white hover:shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all cursor-default"
               >
@@ -170,17 +198,21 @@ const About = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            animate={{ 
-              y: [0, -10, 0],
-              transition: {
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }
-            }}
+            animate={
+              allowAmbientMotion
+                ? {
+                    y: [0, -10, 0],
+                    transition: {
+                      duration: 6,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    },
+                  }
+                : undefined
+            }
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="bg-[#111827]/60 backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] shadow-2xl relative overflow-hidden group hover:border-blue-500/30 transition-all duration-500"
+            className="bg-[#081a3a]/60 backdrop-blur-none md:backdrop-blur-2xl border border-white/5 p-10 rounded-[3rem] shadow-2xl relative overflow-hidden group hover:border-blue-500/30 transition-all duration-500"
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl -mr-16 -mt-16 group-hover:bg-blue-600/10 transition-all" />
             
@@ -240,7 +272,7 @@ const About = () => {
                         viewport={{ once: true }}
                         className="relative"
                       >
-                        <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${edu.color} flex items-center justify-center text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border-2 border-[#0b0e14]`}>
+                        <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${edu.color} flex items-center justify-center text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border-2 border-[#050b1a]`}>
                           <span className="text-xs">{edu.icon}</span>
                         </div>
                         <div className="absolute inset-0 rounded-full bg-blue-500/10 animate-ping -z-10" />
@@ -256,7 +288,7 @@ const About = () => {
                       viewport={{ once: true }}
                       className={`relative ml-12 md:ml-0 md:w-[42%] ${index % 2 === 0 ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}
                     >
-                      <div className="bg-[#111827]/40 backdrop-blur-xl p-5 rounded-[1.5rem] border border-white/5 shadow-xl group hover:border-blue-500/20 transition-all duration-500 relative overflow-hidden">
+                      <div className="bg-[#081a3a]/40 backdrop-blur-none md:backdrop-blur-xl p-5 rounded-[1.5rem] border border-white/5 shadow-xl group hover:border-blue-500/20 transition-all duration-500 relative overflow-hidden">
                         <div className={`text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'} flex items-center gap-2`}>
                           {index % 2 === 0 ? <><span className="w-3 h-[1px] bg-blue-500/30" /> {edu.year}</> : <>{edu.year} <span className="w-3 h-[1px] bg-blue-500/30" /></>}
                         </div>

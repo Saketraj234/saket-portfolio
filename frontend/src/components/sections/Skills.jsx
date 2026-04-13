@@ -1,11 +1,24 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { 
   FaReact, FaNodeJs, FaJs, FaGithub, FaDatabase, FaCode, FaTerminal, FaPython, FaBrain, FaJava
 } from 'react-icons/fa';
 import { SiTailwindcss, SiExpress, SiMongodb, SiGit, SiSpringboot, SiPostgresql } from 'react-icons/si';
 
 const Skills = () => {
+  const reduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener('change', update);
+    return () => mediaQuery.removeEventListener('change', update);
+  }, []);
+
+  const allowAmbientMotion = !reduceMotion && !isMobile;
+
   const skillCategories = [
     {
       title: 'Full Stack Development',
@@ -62,7 +75,7 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="py-20 bg-[#0b0e14] relative overflow-hidden">
+    <section id="skills" className="py-20 bg-transparent relative overflow-hidden">
       <div className="mesh-gradient opacity-20" />
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -86,14 +99,18 @@ const Skills = () => {
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                animate={{ 
-                  y: [0, -5, 0],
-                  transition: {
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
-                }}
+                animate={
+                  allowAmbientMotion
+                    ? {
+                        y: [0, -5, 0],
+                        transition: {
+                          duration: 4,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        },
+                      }
+                    : undefined
+                }
                 transition={{ duration: 0.5 }}
                 viewport={{ once: true }}
                 className="flex flex-col items-center"
@@ -110,15 +127,19 @@ const Skills = () => {
                     key={index}
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
-                    animate={{ 
-                      y: [0, -10, 0],
-                      transition: {
-                        duration: 3 + Math.random() * 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: Math.random() * 2
-                      }
-                    }}
+                    animate={
+                      allowAmbientMotion
+                        ? {
+                            y: [0, -10, 0],
+                            transition: {
+                              duration: 3.5 + (index % 3),
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                              delay: (index % 4) * 0.25,
+                            },
+                          }
+                        : undefined
+                    }
                     whileHover={{ 
                       y: -20, 
                       scale: 1.08,
@@ -127,7 +148,7 @@ const Skills = () => {
                     }}
                     transition={{ duration: 0.4, delay: index * 0.05 }}
                     viewport={{ once: true }}
-                    className="w-44 h-44 flex flex-col items-center justify-center gap-6 bg-[#111827]/50 backdrop-blur-xl border border-white/5 rounded-[2.5rem] hover:border-blue-500/40 transition-all duration-500 group shadow-[0_10px_30px_rgba(0,0,0,0.3)] relative overflow-hidden"
+                    className="w-44 h-44 flex flex-col items-center justify-center gap-6 bg-[#081a3a]/50 backdrop-blur-none md:backdrop-blur-xl border border-white/5 rounded-[2.5rem] hover:border-blue-500/40 transition-all duration-500 group shadow-[0_10px_30px_rgba(0,0,0,0.3)] relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/5 transition-colors duration-500" />
                     <div className="text-5xl group-hover:scale-125 transition-transform duration-500 filter drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] relative z-10">
