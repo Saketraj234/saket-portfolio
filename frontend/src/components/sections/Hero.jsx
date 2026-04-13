@@ -5,12 +5,24 @@ import { FaGithub, FaLinkedin, FaEnvelope, FaFileDownload, FaCode } from 'react-
 import { Link } from 'react-scroll';
 
 const Hero = () => {
-  const [greeting] = useState(() => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning ☀️';
-    if (hour < 18) return 'Good Afternoon ☀️';
-    return 'Good Evening 🌙';
-  });
+  const [greeting, setGreeting] = useState('');
+
+  useEffect(() => {
+    const updateGreeting = () => {
+      const hour = new Date().getHours();
+      let text = '';
+      if (hour < 5) text = 'Good Night 🌙';
+      else if (hour < 12) text = 'Good Morning ☀️';
+      else if (hour < 17) text = 'Good Afternoon ☀️';
+      else if (hour < 21) text = 'Good Evening 🌆';
+      else text = 'Good Night 🌙';
+      setGreeting(text);
+    };
+
+    updateGreeting();
+    const interval = setInterval(updateGreeting, 60000); // Check every minute
+    return () => clearInterval(interval);
+  }, []);
   const reduceMotion = useReducedMotion();
   const [isMobile, setIsMobile] = useState(false);
 
@@ -60,7 +72,7 @@ const Hero = () => {
               </span>
             </div>
 
-            <h1 className="text-5xl sm:text-7xl font-black text-white mb-6 tracking-tight">
+            <h1 className="text-4xl sm:text-7xl font-black text-white mb-6 tracking-tight">
               Hi, I'm <span className="blue-text-gradient">Saket Raj</span>
             </h1>
             

@@ -151,12 +151,12 @@ const Projects = () => {
                     ))}
                   </div>
 
-                  <div className="flex justify-center gap-4">
+                  <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <a 
                       href={project.github} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#050b1a] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-w-[140px]"
+                      className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#050b1a] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all sm:min-w-[140px]"
                     >
                       <FaGithub size={18} /> GitHub
                     </a>
@@ -165,7 +165,7 @@ const Projects = () => {
                         href={project.live} 
                         target="_blank" 
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#050b1a] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all min-w-[140px]"
+                        className="flex items-center justify-center gap-2 px-6 py-2.5 bg-[#050b1a] border border-white/10 rounded-full text-white text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black transition-all sm:min-w-[140px]"
                       >
                         <FaExternalLinkAlt size={16} /> Live Demo
                       </a>

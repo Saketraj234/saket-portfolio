@@ -53,7 +53,7 @@ const Navbar = () => {
     const update = () => {
       rafId = null;
       const y = window.scrollY;
-      const nextScrolled = y > 50;
+      const nextScrolled = y > 20;
       if (nextScrolled !== lastScrolledValue) {
         lastScrolledValue = nextScrolled;
         setIsScrolled(nextScrolled);
@@ -78,15 +78,21 @@ const Navbar = () => {
       }
 
       const lastY = lastScrollYRef.current;
-      const isScrollingDown = y > lastY;
-      const shouldHide = isScrollingDown && y > 140;
+      const diff = y - lastY;
+      
+      // Threshold to prevent jitter (5px)
+      if (Math.abs(diff) < 5 && y > 20) {
+        return;
+      }
+
+      const isScrollingDown = diff > 0;
+      const shouldHide = isScrollingDown && y > 100;
       const shouldShow = !isScrollingDown || y < 20;
 
       if (shouldHide && isVisibleRef.current) {
         isVisibleRef.current = false;
         setIsVisible(false);
-      }
-      if (shouldShow && !isVisibleRef.current) {
+      } else if (shouldShow && !isVisibleRef.current) {
         isVisibleRef.current = true;
         setIsVisible(true);
       }
@@ -116,14 +122,21 @@ const Navbar = () => {
   }, [isOpen]);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-[100] transition-transform duration-300 ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
-      } transition-[background,box-shadow,padding] duration-500 ${
-        isScrolled
-          ? 'bg-gradient-to-b from-[#0b1f48]/80 via-[#061432]/75 to-[#050b1a]/60 backdrop-blur-lg md:backdrop-blur-xl border-b border-white/10 py-4 shadow-[0_14px_45px_rgba(0,0,0,0.35)] ring-1 ring-white/5'
-          : 'bg-gradient-to-b from-[#0b1f48]/55 via-[#061432]/45 to-[#050b1a]/35 backdrop-blur-lg md:backdrop-blur-xl border-b border-white/10 py-5 ring-1 ring-white/5'
-      }`}
+    <motion.nav
+      animate={{ 
+        y: isVisible ? 0 : -100,
+        backgroundColor: isScrolled ? 'rgba(6, 20, 50, 0.95)' : 'rgba(6, 20, 50, 0)',
+        borderBottomColor: isScrolled ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0)',
+        paddingTop: isScrolled ? '1rem' : '1.25rem',
+        paddingBottom: isScrolled ? '1rem' : '1.25rem',
+      }}
+      transition={{ 
+        duration: 0.3, 
+        ease: "easeInOut" 
+      }}
+      className={`fixed top-0 left-0 w-full z-[100] border-b shadow-lg shadow-black/20 ${
+         isScrolled ? 'md:backdrop-blur-xl' : ''
+       }`}
     >
       <div className="max-w-[1600px] mx-auto px-8 sm:px-14 lg:px-20">
         <div className="flex items-center justify-between">
@@ -205,7 +218,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   );
 };
 

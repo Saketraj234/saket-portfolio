@@ -139,7 +139,7 @@ const About = () => {
           </motion.div>
 
           {/* Stats Bar - Horizontal with Floating Effect */}
-          <div className="grid grid-cols-3 gap-4 py-8 border-y border-white/5 bg-white/2 backdrop-blur-none md:backdrop-blur-sm rounded-2xl px-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 py-8 border-y border-white/5 bg-white/2 backdrop-blur-none md:backdrop-blur-sm rounded-2xl px-2 sm:px-4">
             {stats.map((stat, index) => (
               <motion.div
                 key={index}
@@ -247,9 +247,9 @@ const About = () => {
               <span className="w-6 h-1 bg-blue-500 rounded-full" />
             </motion.h3>
 
-            <div className="relative max-w-xl mx-auto">
+            <div className="relative w-full max-w-2xl mx-auto">
               {/* Central Vertical Line with Glow */}
-              <div className="absolute left-[16px] md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-0.5 bg-blue-900/30 rounded-full overflow-hidden">
+              <div className="absolute left-[18px] md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-0.5 bg-blue-900/20 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ height: 0 }}
                   whileInView={{ height: "100%" }}
@@ -260,11 +260,11 @@ const About = () => {
               </div>
 
               {/* Timeline Items */}
-              <div className="space-y-12">
+              <div className="space-y-10 md:space-y-12">
                 {education.map((edu, index) => (
                   <div key={index} className="relative">
                     {/* Node/Circle with Pulsing Glow */}
-                    <div className="absolute left-[16px] md:left-1/2 md:-translate-x-1/2 top-0 z-20">
+                    <div className="absolute left-[18px] md:left-1/2 md:-translate-x-1/2 top-0 z-20 -translate-x-1/2">
                       <motion.div
                         initial={{ scale: 0 }}
                         whileInView={{ scale: 1 }}
@@ -272,10 +272,10 @@ const About = () => {
                         viewport={{ once: true }}
                         className="relative"
                       >
-                        <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${edu.color} flex items-center justify-center text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border-2 border-[#050b1a]`}>
-                          <span className="text-xs">{edu.icon}</span>
+                        <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${edu.color} flex items-center justify-center text-white shadow-[0_0_20px_rgba(59,130,246,0.3)] border-2 border-[#050b1a]`}>
+                          <span className="text-sm">{edu.icon}</span>
                         </div>
-                        <div className="absolute inset-0 rounded-full bg-blue-500/10 animate-ping -z-10" />
+                        <div className="absolute inset-0 rounded-full bg-blue-500/20 animate-ping -z-10" />
                       </motion.div>
                     </div>
 
@@ -286,30 +286,30 @@ const About = () => {
                       whileHover={{ scale: 1.02 }}
                       transition={{ duration: 0.5, delay: 0.1 + index * 0.05 }}
                       viewport={{ once: true }}
-                      className={`relative ml-12 md:ml-0 md:w-[42%] ${index % 2 === 0 ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}
+                      className={`relative ml-10 md:ml-0 md:w-[44%] ${index % 2 === 0 ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}
                     >
-                      <div className="bg-[#081a3a]/40 backdrop-blur-none md:backdrop-blur-xl p-5 rounded-[1.5rem] border border-white/5 shadow-xl group hover:border-blue-500/20 transition-all duration-500 relative overflow-hidden">
-                        <div className={`text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-2 ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'} flex items-center gap-2`}>
-                          {index % 2 === 0 ? <><span className="w-3 h-[1px] bg-blue-500/30" /> {edu.year}</> : <>{edu.year} <span className="w-3 h-[1px] bg-blue-500/30" /></>}
+                      <div className="bg-[#081a3a]/50 backdrop-blur-sm md:backdrop-blur-xl p-6 rounded-[2rem] border border-white/5 shadow-2xl group hover:border-blue-500/30 transition-all duration-500 relative overflow-hidden">
+                        <div className={`text-blue-400 text-[11px] font-black uppercase tracking-[0.2em] mb-3 ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'} flex items-center gap-3`}>
+                          {index % 2 === 0 ? <><span className="hidden md:block w-4 h-[1px] bg-blue-500/30" /> {edu.year}</> : <>{edu.year} <span className="hidden md:block w-4 h-[1px] bg-blue-500/30" /></>}
                         </div>
 
-                        <h4 className="text-lg font-black text-white mb-1 group-hover:text-blue-400 transition-colors leading-tight">
+                        <h4 className="text-xl font-black text-white mb-2 group-hover:text-blue-400 transition-colors leading-tight">
                           {edu.title}
                         </h4>
 
-                        <p className="text-slate-500 text-[11px] font-bold uppercase tracking-wider mb-3">
+                        <p className="text-slate-500 text-[12px] font-bold uppercase tracking-wider mb-4">
                           {edu.institution}
                         </p>
 
                         <div className={`flex ${index % 2 === 0 ? 'md:justify-end' : 'md:justify-start'}`}>
-                          <span className="px-3 py-1 bg-blue-500/5 border border-blue-500/10 rounded-full text-blue-400/80 text-[9px] font-black uppercase tracking-widest">
+                          <span className="px-4 py-1.5 bg-blue-600/10 border border-blue-500/20 rounded-full text-blue-400 text-[10px] font-black uppercase tracking-widest shadow-lg">
                             {edu.result}
                           </span>
                         </div>
                       </div>
 
                       {/* Connector Line (Desktop Only) */}
-                      <div className={`hidden md:block absolute top-4 w-6 h-[1px] bg-blue-500/20 ${index % 2 === 0 ? '-right-6' : '-left-6'}`} />
+                      <div className={`hidden md:block absolute top-4.5 w-8 h-[1px] bg-blue-500/30 ${index % 2 === 0 ? '-right-8' : '-left-8'}`} />
                     </motion.div>
                   </div>
                 ))}
