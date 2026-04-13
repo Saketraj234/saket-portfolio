@@ -29,7 +29,7 @@ const Contact = () => {
     setStatus({ loading: true, success: false, error: null });
 
     try {
-      const res = await axios.post('http://localhost:5000/api/messages', formData, {
+      const res = await axios.post('https://saket-portfolio-kiof.onrender.com/api/messages', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
