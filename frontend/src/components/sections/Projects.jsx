@@ -23,7 +23,7 @@ const Projects = () => {
       image: "https://images.unsplash.com/photo-1501973801540-537f08ccae7b?auto=format&fit=crop&w=800&q=80",
       tech: ["HTML", "CSS", "JavaScript", "API"],
       github: "https://github.com/Saketraj234/Projects/tree/main/Weather%20Forecasting",
-      live: "#",
+      live: "https://weather-forecast-650.netlify.app/",
       featured: false
     },
     {
@@ -32,7 +32,7 @@ const Projects = () => {
       image: "https://images.unsplash.com/photo-1587145820266-a5951ee6f620?auto=format&fit=crop&w=800&q=80",
       tech: ["HTML", "CSS", "JavaScript"],
       github: "https://github.com/Saketraj234/Projects/tree/main/Calculator",
-      live: "#",
+      live: "https://simplecalculator620.netlify.app/",
       featured: false
     },
     {
