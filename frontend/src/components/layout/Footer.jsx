@@ -1,7 +1,15 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaInstagram, FaArrowUp, FaEnvelope, FaMapMarkerAlt, FaTwitterSquare } from 'react-icons/fa';
-import { animateScroll as scroll } from 'react-scroll';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaInstagram,
+  FaArrowUp,
+  FaEnvelope,
+  FaMapMarkerAlt,
+  FaTwitterSquare,
+} from "react-icons/fa";
+import { animateScroll as scroll } from "react-scroll";
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -9,15 +17,27 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: <FaGithub />, href: "https://github.com/Saketraj234", label: "GitHub" },
-    { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/saket-raj62/", label: "LinkedIn" },
-    { icon: <FaTwitterSquare />, href: "https://instagram.com", label: "Twitter" }
+    {
+      icon: <FaGithub />,
+      href: "https://github.com/Saketraj234",
+      label: "GitHub",
+    },
+    {
+      icon: <FaLinkedin />,
+      href: "https://www.linkedin.com/in/saket-raj62/",
+      label: "LinkedIn",
+    },
+    {
+      icon: <FaTwitterSquare />,
+      href: "https://instagram.com",
+      label: "Twitter",
+    },
   ];
 
   return (
     <footer className="bg-transparent pt-20 pb-12 relative overflow-hidden">
       <div className="mesh-gradient opacity-10" />
-      
+
       <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
         {/* Logo/Name */}
         <motion.div
@@ -34,7 +54,8 @@ const Footer = () => {
 
         {/* Short Bio */}
         <p className="text-slate-400 max-w-md leading-relaxed font-medium mb-10">
-          Backend Architect & Full Stack Developer focused on building scalable, high-performance and real-world impactful applications.
+          Backend Architect & Full Stack Developer focused on building scalable,
+          high-performance and real-world impactful applications.
         </p>
 
         {/* Decorative Divider */}
@@ -69,10 +90,14 @@ const Footer = () => {
         {/* Copyright */}
         <div className="space-y-4">
           <p className="text-slate-500 text-sm font-bold flex items-center justify-center gap-2">
-            Handcrafted by <span className="text-white font-black tracking-tight">Saket <span className="blue-text-gradient">Raj</span></span> <span className="text-blue-500 animate-pulse text-lg">✨</span>
+            Handcrafted by{" "}
+            <span className="text-white font-black tracking-tight">
+              Saket <span className="blue-text-gradient">Raj</span>
+            </span>{" "}
+            <span className="text-blue-500 animate-pulse text-lg">✨</span>
           </p>
-          <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">
-            © 2026. All rights reserved.
+          <p className="text-slate-600 text-[10px] tracking-[0.3em]">
+            © {new Date().getFullYear()} Saket Raj. All rights reserved.
           </p>
         </div>
       </div>
