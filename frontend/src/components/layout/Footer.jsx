@@ -96,8 +96,8 @@ const Footer = () => {
             </span>{" "}
             <span className="text-blue-500 animate-pulse text-lg">✨</span>
           </p>
-          <p className="text-slate-600 text-[10px] tracking-[0.3em]">
-            © {new Date().getFullYear()} Saket Raj. All rights reserved.
+          <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.3em]">
+            © 2026 Saket Raj — All rights reserved.
           </p>
         </div>
       </div>
