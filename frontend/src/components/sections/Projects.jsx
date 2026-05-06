@@ -75,7 +75,7 @@ const Projects = () => {
         "Tailwind CSS",
       ],
 
-      github: "https://github.com/your-username/mmu-student-resource-platform",
+      github: "https://github.com/Saketraj234/MMU-Study-Resources",
 
       live: "https://mmu-study-resources.vercel.app/",
 
@@ -98,7 +98,7 @@ const Projects = () => {
       ],
       github:
         "https://github.com/Saketraj234/Video-Conferencing-Web-Application",
-      live: "#",
+      live: "https://team-meet-liart.vercel.app/",
       featured: false,
     },
     {
