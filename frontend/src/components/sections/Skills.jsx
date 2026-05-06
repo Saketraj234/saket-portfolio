@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { 
-  FaReact, FaNodeJs, FaJs, FaGithub, FaDatabase, FaCode, FaTerminal, FaPython, FaBrain, FaJava
+  FaReact, FaNodeJs, FaJs, FaGithub, FaPostman, FaDatabase, FaCode, FaTerminal, FaPython, FaBrain, FaJava
 } from 'react-icons/fa';
 import { SiTailwindcss, SiExpress, SiMongodb, SiGit, SiSpringboot, SiPostgresql } from 'react-icons/si';
 
@@ -70,6 +70,7 @@ const Skills = () => {
         { name: 'Git', icon: <SiGit className="text-orange-600" /> },
         { name: 'GitHub', icon: <FaGithub className="text-white" /> },
         { name: 'VS Code', icon: <FaTerminal className="text-blue-500" /> },
+        { name: 'Postman', icon: <FaPostman className="text-orange-500" /> },
       ],
     },
   ];
