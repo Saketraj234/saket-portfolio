@@ -30,6 +30,19 @@ const Projects = () => {
       featured: false,
     },
     {
+      title: "Student Toolkit",
+      description:
+        "A modern student utility platform built using HTML, CSS, and JavaScript that combines Attendance Tracker, CGPA Calculator, and PDF Studio tools into one responsive and user-friendly web application.",
+      image:
+        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
+  tech: ["HTML", "CSS", "JavaScript"],
+  github:
+    "https://github.com/Saketraj234/Student-Toolkit",
+  live:
+    "https://mmu-student-tools.netlify.app/",
+  featured: true,
+},
+    {
       title: "Advanced Scientific Calculator",
       description:
         "A modern scientific calculator web application with support for advanced mathematical operations such as trigonometric functions, square roots, and memory operations. It features multiple themes, a responsive UI, and smooth user interactions for an enhanced calculation experience.",
@@ -84,7 +97,7 @@ const Projects = () => {
     {
       title: "Video Conferencing Web Application",
       description:
-        "A full-stack real-time video conferencing platform built using WebRTC and Socket.io, enabling seamless video/audio communication, screen sharing, chat, and meeting recording. Designed to simulate modern virtual meeting solutions like Zoom with a responsive and user-friendly interface.",
+        "A MERN-based real-time video conferencing web application built with WebRTC and Socket.io, featuring video/audio calls, screen sharing, live chat, meeting recording, and a host-controlled collaborative whiteboard with a responsive modern UI.",
       image:
         "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&w=800&q=80",
       tech: [
