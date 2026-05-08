@@ -40,7 +40,7 @@ const Projects = () => {
     "https://github.com/Saketraj234/Student-Toolkit",
   live:
     "https://mmu-student-tools.netlify.app/",
-  featured: true,
+  featured: false,
 },
     {
       title: "Advanced Scientific Calculator",
