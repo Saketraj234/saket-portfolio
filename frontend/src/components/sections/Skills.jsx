@@ -35,13 +35,6 @@ const Skills = () => {
       ],
     },
     {
-      title: 'Database Design',
-      skills: [
-        { name: 'PostgreSQL', icon: <SiPostgresql className="text-blue-400" /> },
-        { name: 'MongoDB', icon: <SiMongodb className="text-green-600" /> },
-      ],
-    },
-    {
       title: 'Languages',
       skills: [
         { name: 'Java', icon: <FaJava className="text-orange-500" /> },
